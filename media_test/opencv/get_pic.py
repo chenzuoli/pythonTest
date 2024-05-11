@@ -1,6 +1,9 @@
 """
 pip install opencv-python
 获取视频截图，每15秒截图一次
+
+unset DYLD_LIBRARY_PATH
+
 """
 
 import cv2
