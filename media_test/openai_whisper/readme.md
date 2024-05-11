@@ -26,7 +26,7 @@ whisper test.mp3 --model medium
 
 开源地址：http://github.com/openai/whisper
 
-
+2024-05-11：large-v3模型准确的最高
 
 问题：
 1.     ModuleNotFoundError: No module named '_ctypes'

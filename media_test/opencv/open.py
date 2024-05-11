@@ -1,5 +1,11 @@
 """
-pip install opencv-python
+剪切视频
+
+error:
+macos bigsur 11
+opencv Symbol not found: _CGLGetCurrentContext   Referenced from
+
+pip install opencv-python==4.8.1.78
 
 """
 

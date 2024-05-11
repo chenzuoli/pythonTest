@@ -1,7 +1,12 @@
+"""
+pip install opencv-python
+获取视频截图，每15秒截图一次
+"""
+
 import cv2
 
 START_TIME = 4  # 设置开始时间(单位秒)
-END_TIME = 28800  # 设置结束时间(单位秒)
+END_TIME = 100  # 设置结束时间(单位秒)
 
 vidcap = cv2.VideoCapture("无音频.mp4")  # 这里改自己的视频地址
 
