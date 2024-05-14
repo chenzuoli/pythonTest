@@ -11,7 +11,7 @@ import cv2
 START_TIME = 4  # 设置开始时间(单位秒)
 END_TIME = 100  # 设置结束时间(单位秒)
 
-vidcap = cv2.VideoCapture("无音频.mp4")  # 这里改自己的视频地址
+vidcap = cv2.VideoCapture("no_audio.mp4")  # 这里改自己的视频地址
 
 fps = int(vidcap.get(cv2.CAP_PROP_FPS))  # 获取视频每秒的帧数
 print(fps)
@@ -29,7 +29,7 @@ success, image = vidcap.read()  # 获取第一帧
 count = 0
 while success and frametoStop >= count:
     if count % (30 * 15) == 0:  # 每15秒保存一次
-        cv2.imwrite(r"%s.jpg" % int(count / 375), image)  # 需要并保存的图片地址
+        cv2.imwrite(r"pic/%s.jpg" % int(count / 375), image)  # 需要并保存的图片地址
         print('Process %dth seconds: ' % int(count / 375), success)
     success, image = vidcap.read()  # 每次读取一帧
     count += 1

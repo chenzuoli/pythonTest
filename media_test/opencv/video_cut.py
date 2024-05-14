@@ -8,7 +8,7 @@ pip install opencv-python==4.8.1.78
 import cv2
 
 # 设置要剪切的视频路径和输出路径
-input_path = '无音频.mp4'
+input_path = 'no_audio.mp4'
 output_path = 'output.mp4'
 
 # 设置要剪切的开始时间和结束时间（秒）
