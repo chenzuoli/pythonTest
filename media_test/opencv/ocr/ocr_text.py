@@ -24,10 +24,11 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'/opt/local/bin/tesseract'
 
 # 加载一张图片
-img = cv2.imread(r'1_DPI1000.jpg')
+img = cv2.imread(r'img_2.png')
 
 
 # 识别文字
-text = pytesseract.image_to_string(img, lang="chi_sim")  # 指定语言
+# text = pytesseract.image_to_string(img, lang="chi_sim")  # 指定语言
+text = pytesseract.image_to_string(img, lang='eng')
 
 print(text)
