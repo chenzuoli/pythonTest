@@ -2,33 +2,34 @@
 
 """
 爬取csdn文章
+
+pip install selenium
+pip install beautifulsoup4
+pip install markdownify
+pip install webdriver-manager
 """
 
 import requests
-
-cookie = "uuid_tt_dd=xxxxxxxx-1727360428521-705637; fid=20_26587497275-xxxxxxxx-502018; loginbox_strategy=%7B%22taskId%22%3A349%2C%22abCheckTime%22%3A1727618434975%2C%22version%22%3A%22exp11%22%2C%22blog-threeH-dialog-exp11tipShowTimes%22%3A1%2C%22blog-threeH-dialog-exp11%22%3A1727618434975%7D; UserName=chenzuoli; UserInfo=7d22bb73468e4b2aacfe49c4bd7d9491; UserToken=xxxxxxxxx; UserNick=chenzuoli; AU=026; UN=chenzuoli; BT=1727619580516; p_uid=U010000; csdn_newcert_chenzuoli=1; chenzuolicomment_new=1692600077924; c_segment=5; Hm_lvt_6bcd52f51e9b3dce32bec4a3997715ac=1727360431,1727581962,1727618435,1727923613; dc_sid=2236d12434567d0a574a399ff98989fa; _clck=2vu2kk%7C2%7Cfps%7C0%7C1730; HMACCOUNT=8565DD889761288A; firstDie=1; __gads=ID=72f5d718ca04f4ba:T=1727362164:RT=1728222363:S=ALNI_MYLOmkHsdwUY7c7dbP3hMCsBWrQEg; __gpi=UID=00000f1ed47e1834:T=1727362164:RT=1728222363:S=ALNI_MaZ4-16EHgE1kksBc1RrCkjaWSaFg; __eoi=ID=e1bb2c04c9a6b245:T=1727362164:RT=1728222363:S=AA-Afjbw1r3rg2FRAICN9VucgRKU; creative_btn_mp=3; dc_session_id=10_1728297958155.153914; c_page_id=default; c_pref=default; c_first_ref=default; log_Id_click=39; c_ref=default; c_first_page=https%3A//mp.csdn.net/mp_blog/manage/article; c_dsid=11_1728298330854.696513; Hm_lpvt_6bcd52f51e9b3dce32bec4a3997715ac=1728298331; log_Id_pv=55; log_Id_view=1619; dc_tos=skzhb8"
-
-csdn_url = "https://bizapi.csdn.net/blog/phoenix/console/v1/article/list?page=%s&pageSize=%s"
-
-accept = "application/json, text/plain, */*"
-
-referer = "https://mp.csdn.net/mp_blog/manage/article"
-
-x_ca_key = "xxxxxxxx"
-
-x_ca_nonce = "6704920d-xxxx-48de-a5c9-9240ddcc0014"
-
-x_ca_signature = "xxxxxxxxxxxx/uT8SBd9Uvn2ro="
-
-x_ca_signature_headers = "x-ca-key,x-ca-nonce"
-page = 1
-page_size = 20
+from bs4 import BeautifulSoup
+from markdownify import markdownify as md
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 
 def main():
     """
     主方法
     """
+    cookie = "uuid_tt_dd=xxxxxxxx-1727360428521-705637; fid=20_26587497275-xxxxxxxx-502018;  dc_tos=skzhb8"
+    csdn_url = "https://bizapi.csdn.net/blog/phoenix/console/v1/article/list?page=%s&pageSize=%s"
+    accept = "application/json, text/plain, */*"
+    referer = "https://mp.csdn.net/mp_blog/manage/article"
+    x_ca_key = "xxxxxxxx"
+    x_ca_nonce = "6704920d-xxxx-48de-a5c9-9240ddcc0014"
+    x_ca_signature = "xxxxxxxxxxxx/uT8SBd9Uvn2ro="
+    x_ca_signature_headers = "x-ca-key,x-ca-nonce"
+    page = 1
+    page_size = 20
     crawl_url = csdn_url % (page, page_size)
     headers = {
         "cookie": cookie,
@@ -43,8 +44,66 @@ def main():
     print(crawl_url)
     response = requests.get(crawl_url, headers=headers)
     print(response.status_code, response.text)
-    # 200 {"code":200,"message":"success","traceId":"f0bcd2ff-e8fe-4af3-9418-2d8573edf1d8","data":{"count":{"all":85,"private":0,"deleted":0,"original":0,"enable":81,"audit":3,"draft":1},"list":[{"articleId":"142724217","title":"winforms基本操作-将datagridview内容保存为excel文件","postTime":"2024-10-06 10:44:48","viewCount":"174","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":86,"fansCount":0,"diggCount":8,"collectCount":4,"coverImage":["https://i-blog.csdnimg.cn/direct/e958412e8ace47a5a27b41240273c0b6.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=142724217","plan":null,"qualityScore":43,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"142644960","title":"windows客户端框架选择","postTime":"2024-09-29 22:23:45","viewCount":"371","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":117,"fansCount":0,"diggCount":5,"collectCount":5,"coverImage":["https://i-blog.csdnimg.cn/direct/cdaf77d9f11741e2b9ac28067c5c0842.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=142644960","plan":null,"qualityScore":53,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"142344460","title":"支付宝电脑网页支付上线生产问题","postTime":"2024-09-18 21:40:34","viewCount":"83","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"2","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":263,"fansCount":0,"diggCount":0,"collectCount":0,"coverImage":["https://i-blog.csdnimg.cn/direct/afae3147da944c88a9a62f2e9a6f4261.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=142344460","plan":null,"qualityScore":51,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"142344371","title":"单机环境下解决wsgiserver启动apscheduler运行多次问题","postTime":"2024-09-18 21:34:44","viewCount":"42","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"2","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":231,"fansCount":0,"diggCount":0,"collectCount":0,"coverImage":[],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=142344371","plan":null,"qualityScore":33,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"140747042","title":"相机怎么选（不推荐，只分析）","postTime":"2024-07-28 10:00:18","viewCount":"709","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":1149,"fansCount":0,"diggCount":24,"collectCount":18,"coverImage":["https://img-blog.csdnimg.cn/img_convert/27494cc8ffed739effb21f9598a62d4b.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=140747042","plan":null,"qualityScore":93,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"140746890","title":"Python多进程环境同时操作时如何互斥操作","postTime":"2024-07-28 09:50:54","viewCount":"583","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":2485,"fansCount":0,"diggCount":8,"collectCount":10,"coverImage":["https://i-blog.csdnimg.cn/direct/f624cc4f58594c4c8191159e85b0a7da.jpeg"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=140746890","plan":null,"qualityScore":65,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"140247524","title":"ffmpeg图片视频编辑器工具的安装与使用","postTime":"2024-07-07 16:04:25","viewCount":"556","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":2024,"fansCount":0,"diggCount":3,"collectCount":9,"coverImage":["https://i-blog.csdnimg.cn/direct/c1ae32b205484802bc2d5b22bd4cd3cc.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=140247524","plan":null,"qualityScore":70,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"140247280","title":"乐知付-如何使用平台收款","postTime":"2024-07-07 15:51:22","viewCount":"431","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":1954,"fansCount":0,"diggCount":10,"collectCount":10,"coverImage":["https://i-blog.csdnimg.cn/direct/d34a325e817e4deead979fffbab592c2.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=140247280","plan":null,"qualityScore":67,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"140247175","title":"2024组装一台能跑AI大模型的电脑","postTime":"2024-07-07 15:43:48","viewCount":"901","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":1185,"fansCount":0,"diggCount":3,"collectCount":8,"coverImage":["https://i-blog.csdnimg.cn/direct/f12a2054780e4da099bec784c9782988.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=140247175","plan":null,"qualityScore":75,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"140231048","title":"软件分享-Navicat数据库查询工具","postTime":"2024-07-06 16:24:30","viewCount":"0","commentCount":"0","commentAuth":"2","isTop":"0","status":"6","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":0,"fansCount":0,"diggCount":0,"collectCount":0,"coverImage":["https://i-blog.csdnimg.cn/direct/c85bba28509147fda909b3085c8671b6.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=140231048","plan":null,"qualityScore":57,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"138012522","title":"博客摘录「 Python实现将mp3音频格式转换为wav格式」2024年4月20日","postTime":"2024-04-20 21:40:37","viewCount":"0","commentCount":"0","commentAuth":"2","isTop":"0","status":"2","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":0,"isRecommend":false,"totalExposures":0,"fansCount":0,"diggCount":0,"collectCount":0,"coverImage":[],"voteId":0,"isLock":false,"deprecated":true,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=138012522","plan":null,"qualityScore":14,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"137479533","title":"html加载后端数据较慢问题记载","postTime":"2024-04-07 21:50:00","viewCount":"482","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":1733,"fansCount":0,"diggCount":5,"collectCount":10,"coverImage":["https://img-blog.csdnimg.cn/direct/8046aa9e7c644cc8a66cdf984242c3b4.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=137479533","plan":null,"qualityScore":68,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"137395850","title":"乐知付-如何制作html文件可双击跳转到指定页面？","postTime":"2024-04-05 10:51:13","viewCount":"353","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":1727,"fansCount":0,"diggCount":5,"collectCount":5,"coverImage":["https://img-blog.csdnimg.cn/direct/42aba5d193cf4d47b7c92ee9fbcfae00.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=137395850","plan":null,"qualityScore":71,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"137248972","title":"VisionOS应用开发需要哪些工具","postTime":"2024-04-01 22:26:09","viewCount":"286","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":1701,"fansCount":0,"diggCount":2,"collectCount":0,"coverImage":["https://img-blog.csdnimg.cn/direct/502f4788ad9a4044b8b107a6c7be6206.webp"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=137248972","plan":null,"qualityScore":37,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"136960975","title":"说下程序员的mac电脑用哪些工具事半功倍","postTime":"2024-03-23 09:58:26","viewCount":"357","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":369,"fansCount":0,"diggCount":7,"collectCount":1,"coverImage":["https://img-blog.csdnimg.cn/img_convert/92196dbee5ee44f9b397e73b7a9cb907.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=136960975","plan":null,"qualityScore":41,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"132529123","title":"cookie技术介绍","postTime":"2023-08-27 22:50:06","viewCount":"270","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":4879,"fansCount":0,"diggCount":0,"collectCount":0,"coverImage":[],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=132529123","plan":null,"qualityScore":70,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"132527569","title":"XSS攻击是怎么回事？记录一下","postTime":"2023-08-27 20:53:57","viewCount":"628","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":6998,"fansCount":1,"diggCount":2,"collectCount":5,"coverImage":["https://img-blog.csdnimg.cn/b301ceabe76f4b1aad3a0e76404b8fc0.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=132527569","plan":null,"qualityScore":59,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"132436337","title":"python内置函数的源码去哪里找？","postTime":"2023-08-22 20:43:40","viewCount":"406","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":5301,"fansCount":0,"diggCount":0,"collectCount":0,"coverImage":["https://img-blog.csdnimg.cn/2c8fff1e14244ef18bd6873824e83185.png"],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=132436337","plan":null,"qualityScore":28,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"128908353","title":"云原生框架k8s基本操作","postTime":"2023-02-06 21:06:07","viewCount":"642","commentCount":"1","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":13409,"fansCount":0,"diggCount":0,"collectCount":1,"coverImage":[],"voteId":0,"isLock":false,"deprecated":false,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=128908353","plan":null,"qualityScore":77,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"},{"articleId":"128506751","title":"scp和ssh的用法","postTime":"2022-12-31 16:55:32","viewCount":"286","commentCount":"0","commentAuth":"2","isTop":"0","status":"1","username":"chenzuoli","type":"1","isNeedFans":"0","isNeedVip":"0","isVipArticle":false,"editorType":1,"isRecommend":false,"totalExposures":13226,"fansCount":0,"diggCount":0,"collectCount":0,"coverImage":[],"voteId":0,"isLock":false,"deprecated":true,"isShowFeedback":false,"complaintArticleId":0,"complaintTitle":null,"complaintUrl":null,"complaintArticleStatus":null,"isComplaint":null,"complaintStatus":null,"complaintOrderNumber":null,"scheduledTime":0,"downloadShareDataUrl":"https://blog.csdn.net/phoenix/web/v1/share/download-share-data?articleId=128506751","plan":null,"qualityScore":20,"qualitySpecification":"https://blog.csdn.net/u010280923/article/details/131449478"}],"page":1,"size":20,"listStatus":"all","total":85,"couponGuidanceModule":{"btnImgUrl":"https://img-home.csdnimg.cn/images/20240229105408.png","bubbleImgUrl":"https://img-home.csdnimg.cn/images/20240229105332.png","url":"https://mp.csdn.net/mp_blog/manage/traffic"}}}
+
+
+def get_article_by_chrome():
+    """
+    通过selenium获取csdn文章内容
+    通过beautifulsoup4解析html
+    通过markdownify解析文章html内容为markdown
+    """
+
+    csdn_article_url = 'https://blog.csdn.net/xuezhe5212/article/details/140344334'
+
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.page_load_strategy = 'eager'  # 加快页面的加载速度
+    chrome_options.add_argument("--no-sandbox")
+
+    from selenium.webdriver.chrome.service import Service
+    service = Service(executable_path="/usr/bin/google-chrome")
+
+    chrome = webdriver.Chrome(options=chrome_options)
+    chrome.get(csdn_article_url)
+    source_html = chrome.page_source
+    soup = BeautifulSoup(source_html, 'html.parser')
+    title = soup.find('title').get_text(strip=True)
+    content_html = soup.find('div', {'id': 'content_views'})
+    content = md(str(content_html))
+    print(title, content)
+
+
+def get_article_by_firefox():
+    from selenium import webdriver
+    from selenium.webdriver.firefox.service import Service
+    web_url = 'https://blog.csdn.net/xuezhe5212/article/details/140344334'
+    options = webdriver.FirefoxOptions()
+    options.add_argument("--headless")  # 不打开浏览器
+    options.browser_version = 'stable'
+    options.page_load_strategy = 'eager'
+    # profile_path = "C:\\Users\\Administrator\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\kdzv5ez8.default-release-1"
+    # profile = webdriver.FirefoxProfile(profile_directory=profile_path)
+    # firefoxdriver_path = "D:\\Firefox\\geckodriver-v0.33.0-win64\\geckodriver.exe"
+    firefoxdriver_path = "/home/lezhifu/geckodriver"
+    service = Service(executable_path=firefoxdriver_path)
+    firefox_path = "/home/lezhifu/firefox/firefox"
+    options.binary_location = firefox_path
+    print('connecting firefox webbrowser.')
+    firefox = webdriver.Firefox(service=service, options=options)
+    # options.profile = profile
+    # firefox = webdriver.Firefox(options=options)
+    firefox.get(web_url)
+    print(f'connected web url: {web_url}')
+    source_html = firefox.page_source
+    soup = BeautifulSoup(source_html, 'html.parser')
+    title = soup.find('title').get_text(strip=True)
+    content_html = soup.find('div', {'id': 'content_views'})
+    content = md(str(content_html))
+    print(title, content)
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    # get_article_by_chrome()
+    get_article_by_firefox()

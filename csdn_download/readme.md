@@ -5,3 +5,12 @@
 2. x_ca_key
 3. x_ca_nonce
 4. x_ca_signature
+
+
+# 安装
+```commandline
+pip install selenium
+pip install beautifulsoup4
+pip install markdownify
+pip install webdriver-manager
+```
