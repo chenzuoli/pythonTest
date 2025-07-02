@@ -1,6 +1,8 @@
 """
 pip install m3u8-To-MP4==0.1.11
 """
+import os
+import sys
 
 import m3u8_To_MP4
 
@@ -14,9 +16,14 @@ if __name__ == '__main__':
     # 小小士兵-电影
     # m3u8_To_MP4.multithread_download('https://vip.ffzy-play2.com/20240529/60101_e7c4c217/index.m3u8')
     # 过往人生-电影
-    m3u8_To_MP4.multithread_download('https://vip1.lz-cdn1.com/20230822/21949_76f0f3e7/index.m3u8')
+    # m3u8_To_MP4.multithread_download('https://vip1.lz-cdn1.com/20230822/21949_76f0f3e7/index.m3u8')
     # 黑客帝国3
     # m3u8_To_MP4.multithread_download('https://v9.qrssv.com/202408/21/mzrg1KPazE18/video/index.m3u8')
+
+    # # 小小的我
+    # m3u8_To_MP4.multithread_download("https://v.cdnlz3.com/20250104/31849_3b700c2c/index.m3u8")
+    m3u8_To_MP4.multithread_download(sys.argv[1])
+    os.rename("m3u8_To_MP4.mp4", sys.argv[2])
 
 
     # 2. Download videos from existing m3u8 files.
